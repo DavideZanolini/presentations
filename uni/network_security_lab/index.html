@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>reveal.js</title>
+
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/black.css">
+
+        <!-- Theme used for syntax highlighted code -->
+        <link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<style>
+            .slide-footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                padding: 10px 0;
+                font-size: 0.4em;
+                color: #999;
+                text-align: center;
+                z-index: 100;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+		<div class="reveal">
+            <div class="slides">
+                <!-- Slide 1 -->
+                <section data-background-color="lightblue">
+                    <h1 style="margin-top: -200px;">Title</h1>
+                    <h2><small>Subtitle</small></h2>
+					<p><small>The presentation is avialble here: <link>http://bit.ly/sium</link></small></p>
+				</section>      
+				<!-- Slide 2: image and text-->
+                <section data-background-color="lightblue">
+					<div style="display: flex; align-items: center; justify-content: flex-start; margin-left: -200px;">
+						<img src="media/images/stock.jpg" alt="Stock" style="max-width: 800px; max-height: 800px; margin-right: 40px; border-radius: 8px;">
+						<div>
+							<h3>Image Title</h3>
+							<p>This is the description or text that appears to the right of the image.</p>
+						</div>
+					</div>
+				</section>
+				<!-- Slide 3: code and text-->
+				<section data-background-color="lightblue">
+					<pre><code data-line-numbers>import pwn
+from Crypto.Util.number import bytes_to_long, long_to_bytes
+from math import gcd
+
+e = 65537
+
+conn = pwn.remote("cyberchallenge.disi.unitn.it", "50102")
+conn.recvline()
+encrypted_flag = int(conn.recv().decode().strip().split(": ")[1].split("\n")[0])
+
+# retrieve n
+conn.sendline(b"1")
+conn.recvline().decode()
+
+m1 = bytes_to_long(b"A")
+conn.sendline(b"A")
+conn.recvline().decode()
+c1 = int(conn.recvline().decode().strip().split(":")[1].strip())
+conn.recvline().decode()
+conn.sendline(b"1")
+conn.recvline().decode()
+m2 = bytes_to_long(b"B")
+conn.sendline(b"B")
+conn.recvline().decode()
+conn.recvline().decode()
+c2 = int(conn.recvline().decode().strip().split(":")[1].strip())
+
+n = gcd(pow(m1, e) - c1, pow(m2, e) - c2)
+
+# Choose a multiplier s
+s = 2
+enc_s = pow(s, e, n)
+
+# Multiply the encrypted flag by enc_s to get a new ciphertext
+modified_ciphertext = (encrypted_flag % n) * (enc_s % n) % n
+conn.sendline(b"2")
+conn.recvline().decode()
+conn.sendline(str(modified_ciphertext).encode())
+conn.recvline().decode()
+conn.recvline().decode()
+conn.recvline().decode()
+
+m = int(conn.recvline().decode().strip().split(":")[1].strip())
+flag_int = m // s
+print("Flag:", long_to_bytes(flag_int).decode())
+					</code></pre>
+					<p style="font-size: 0.7em; margin-top: 20px;">
+						This Python script is used to retrieve the flag!
+					</p>
+				</section>
+				<div class="slide-footer">Davide Zanolini - Network Security Lab - University of Trento</div>
+            </div>
+        </div>
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script>
+            Reveal.initialize({
+                hash: true,
+				slideNumber: true,
+                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+            });
+        </script>
+    </body>
+</html>
