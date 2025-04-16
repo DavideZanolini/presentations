@@ -11,8 +11,10 @@
         <link rel="stylesheet" href="dist/theme/black.css">
 
         <!-- Theme used for syntax highlighted code -->
-        <link rel="stylesheet" href="plugin/highlight/monokai.css">
-		<style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+        <style>
             .slide-footer {
                 position: fixed;
                 bottom: 0;
@@ -25,30 +27,44 @@
                 z-index: 100;
                 margin: 0;
             }
+
+            .big-code-block {
+                width: 95vw;
+                max-width: 1400px;
+                min-height: 700px;
+                max-height: 90vh;
+                margin: 0 auto 20px auto;
+                overflow: auto;
+                background: #23241f;
+                border-radius: 8px;
+                box-sizing: border-box;
+                padding: 1em;
+            }
         </style>
     </head>
     <body>
-		<div class="reveal">
+        <div class="reveal">
             <div class="slides">
                 <!-- Slide 1 -->
                 <section data-background-color="lightblue">
                     <h1 style="margin-top: -200px;">Title</h1>
                     <h2><small>Subtitle</small></h2>
-					<p><small>The presentation is avialble here: <link>http://bit.ly/sium</link></small></p>
-				</section>      
-				<!-- Slide 2: image and text-->
+                    <p><small>The presentation is available here: <link>http://bit.ly/dz-ns-lab</link></small></p>
+                </section>      
+                <!-- Slide 2: image and text-->
                 <section data-background-color="lightblue">
-					<div style="display: flex; align-items: center; justify-content: flex-start; margin-left: -200px;">
-						<img src="media/images/stock.jpg" alt="Stock" style="max-width: 800px; max-height: 800px; margin-right: 40px; border-radius: 8px;">
-						<div>
-							<h3>Image Title</h3>
-							<p>This is the description or text that appears to the right of the image.</p>
-						</div>
-					</div>
-				</section>
-				<!-- Slide 3: code and text-->
-				<section data-background-color="lightblue">
-					<pre><code data-line-numbers>import pwn
+                    <div style="display: flex; align-items: center; justify-content: flex-start; margin-left: -200px;">
+                        <img src="media/images/stock.jpg" alt="Stock" style="max-width: 800px; max-height: 800px; margin-right: 40px; border-radius: 8px;">
+                        <div>
+                            <h3>Image Title</h3>
+                            <p>This is the description or text that appears to the right of the image.</p>
+                        </div>
+                    </div>
+                </section>
+                <!-- Slide 3: code and text-->
+                <section data-background-color="lightblue">
+                    <pre class="big-code-block"><code class="language-python">
+import pwn
 from Crypto.Util.number import bytes_to_long, long_to_bytes
 from math import gcd
 
@@ -93,12 +109,12 @@ conn.recvline().decode()
 m = int(conn.recvline().decode().strip().split(":")[1].strip())
 flag_int = m // s
 print("Flag:", long_to_bytes(flag_int).decode())
-					</code></pre>
-					<p style="font-size: 0.7em; margin-top: 20px;">
-						This Python script is used to retrieve the flag!
-					</p>
-				</section>
-				<div class="slide-footer">Davide Zanolini - Network Security Lab - University of Trento</div>
+                    </code></pre>
+                    <p style="font-size: 0.7em; margin-top: 20px;">
+                        This Python script is used to retrieve the flag!
+                    </p>
+                </section>
+                <div class="slide-footer">Davide Zanolini - Network Security Lab - University of Trento</div>
             </div>
         </div>
         <script src="dist/reveal.js"></script>
@@ -108,8 +124,15 @@ print("Flag:", long_to_bytes(flag_int).decode())
         <script>
             Reveal.initialize({
                 hash: true,
-				slideNumber: true,
+                slideNumber: true,
                 plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+            });
+
+            // Initialize Highlight.js
+            document.addEventListener('DOMContentLoaded', (event) => {
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
             });
         </script>
     </body>
